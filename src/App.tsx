@@ -100,7 +100,7 @@ export default function LetterQuizForSamuel() {
         Welcher Buchstabe ist das?
       </h1>
 
-      {/* Großes Bild / Emoji für Dreijährige gut erkennbar */}
+      {/* Grosses Bild / Emoji  */}
       <div className="text-9xl bg-white p-8 rounded-2xl shadow-md">
         {currentItem.emoji}
       </div>
@@ -111,7 +111,7 @@ export default function LetterQuizForSamuel() {
           <button
           key={index}
           onClick={() => handleSelectLetter(letter)}
-          className="w-16 h-16 bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold rounded-2xl shadow-lg transition transform hover:scale-105 active:scale-95"
+          className="w-13 h-13 bg-blue-500 hover:bg-blue-700 text-white text-3xl font-bold rounded-2xl shadow-lg transition transform hover:scale-105 active:scale-95"
           >
           {letter}
           </button>
