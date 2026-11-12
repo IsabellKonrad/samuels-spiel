@@ -59,6 +59,10 @@ const shuffleArray = (array: any[]): any[] => {
 };
 
 export default function LetterQuizForSamuel() {
+  // Neue States für den Namen und ob das Spiel gestartet wurde
+ const [playerName, setPlayerName] = useState<string>('');
+ const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
+
   // Items beim Start direkt zufaellig durchmischen
  const [items, setItems] = useState<LearningItem[]>(() => shuffleArray(initialItems));
  const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -73,11 +77,18 @@ export default function LetterQuizForSamuel() {
   // Wenn sich das Wort aendert, neue 5 Buchstaben-Buttons generieren
  useEffect(() => {
   setOptions(generateOptions(currentItem.letter));
- }, [currentIndex]);
+ }, [currentIndex, items]);
+
+ const handleStartGame = (e: React.FormEvent) => {
+  e.preventDefault();
+  if (playerName.trim() !== '') {
+    setIsGameStarted(true);
+  }
+ };
 
   const handleSelectLetter = (selectedLetter: string) => {
     if (selectedLetter === currentItem.letter) {
-      setFeedback('Richtig! 🎉 Toll gemacht, Samuel!');
+      setFeedback(`Richtig! 🎉 Toll gemacht, ${playerName}!`);
       setTimeout(() => {
         // Zum nächsten Item wechseln oder neu mischen, wenn das Ende erreicht ist
         if (currentIndex + 1 < items.length) {
@@ -94,10 +105,41 @@ export default function LetterQuizForSamuel() {
     }
   };
 
+  // 1. Wenn das Spiel noch nicht gestartet wurde, zeige den Willkommens-Bildschirm
+ if (!isGameStarted) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50 p-6 text-center gap-6">
+    <h1 className="text-4xl font-bold text-blue-800">
+      Buchstaben-Spiel 🎒
+    </h1>
+    <p className="text-2xl text-gray-700 max-w-md">
+      Hallo! Schön, dass du das Buchstaben-Spiel spielst. Wie heißt du?
+    </p>
+    <form onSubmit={handleStartGame} className="flex flex-col sm:flex-row gap-4 items-center">
+      <input
+      type="text"
+      value={playerName}
+      onChange={(e) => setPlayerName(e.target.value)}
+      placeholder="Dein Name..."
+      className="px-6 py-4 text-2xl border-2 border-blue-400 rounded-xl focus:outline-none focus:border-blue-600 shadow-inner text-center bg-white"
+      autoFocus
+      required
+      />
+      <button
+      type="submit"
+      className="bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold px-8 py-4 rounded-xl shadow-md transition cursor-pointer"
+      >
+      Los geht's! 🚀
+      </button>
+    </form>
+    </div>
+  );
+ }
+ // 2. Das eigentliche Spiel (wenn der Name eingegeben wurde)c
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-blue-50 p-10 pt-16 text-center gap-8">
       <h1 className="text-3xl font-bold text-blue-800">
-        Welcher Buchstabe ist das?
+        Mit welchem Buchstaben beginnt das Wort?
       </h1>
 
       {/* Grosses Bild / Emoji  */}
